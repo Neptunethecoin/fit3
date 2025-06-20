@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Smart Plan Generator</title>
+<link href="css/style.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script></head>
+<body>
+<header>
+<nav style="background:#111; padding:15px; display:flex; justify-content:space-around; color:white;">
+<a href="index.html" style="color:white; text-decoration:none;">Home</a>
+<a href="questionnaire.html" style="color:white; text-decoration:none;">Questionnaire</a>
+<a href="plan.html" style="color:white; text-decoration:none;">My Plan</a>
+<a href="smart_generator.html" style="color:white; text-decoration:none;">Smart Generator</a>
+</nav>
+</header>
+<main style="padding: 40px; max-width: 800px; margin: auto;">
+<h1>🧠 Smart Workout Plan Generator</h1>
+<label>1. How many days per week can you train?</label><br/>
+<input id="daysPerWeek" max="7" min="1" style="margin-bottom: 20px;" type="number" value="5"/><br/>
+<label>2. What's your primary goal?</label><br/>
+<select id="goal" style="margin-bottom: 20px;">
+<option value="Strength">Strength</option>
+<option value="Fat Loss">Fat Loss</option>
+<option value="Balanced">Balanced</option>
+</select><br/>
+<label>3. Do you have access to gym equipment?</label><br/>
+<select id="equipment" style="margin-bottom: 20px;">
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select><br/>
+<button onclick="generatePlan()" style="padding:10px 20px;">🚀 Generate My Plan</button>
+<div id="output" style="margin-top: 40px;"></div>
+<div style="margin-top: 20px;">
+<button onclick="downloadPDF()" style="padding:10px 20px;">📄 Download as PDF</button>
+</div>
+</main>
+<script>
+const majorCore = ["Pallof Press", "Bench Press Leg Lifts", "Band Pallof Press"];
+const minorCore = ["Plank", "Side Plank", "Push-up Plank", "Leg Raises", "Crunchy Frog", "V-Ups", "Cable Crunches", "Crunch", "Sit-Ups", "Russian Twists", "Scissor Kicks", "Flutter Kicks", "Single Leg lift Crunches", "Captains Chair Weighted Leg Lifts", "Atomic Sit-ups", "Butt-ups", "Winshield wipers", "Planking Leg Rolls", "Mountain Climbers", "Knee To Elbow Sit-ups", "Knee Crunches", "Hanging Straight Leg Lifts", "Hanging Bent Leg Lifts", "Hanging Oblique Crunches", "Cable Oblique Crunches", "Cable Wood Choppers", "Cable Standing Crunch", "Bosu Ball Crunches", "Bosu Ball Sit-ups", "Bosu Ball Oblique Crunches", "Bosu Ball Plank", "TRX Plank", "TRX Crunches", "TRX Pikes", "TRX Scissor Kicks", "TRX Mountain Climbers", "One Legged Bosu Crunches", "SinGle Arm and Leg V-ups", "Burpees", "Superman", "Band Leg Lifts", "Band knee Oblique Crunches", "Hanging Band Leg Lifts", "Hanging Single Leg Band Lifts", "Hanging Leg Raises Static Hold", "Standing Walk Outs", "Standing One Legged Walk Outs", "Wide Leg Sit-ups", "Wide Leg Leg-Raises", "Wide Leg Russian Twists", "Two-Point Bridge", "Twisting Back Extension (M)", "Weighted Ab Crunch (M)", "Oblique Twist (M)", "Negative Crunch", "Figure-8 Crunch", "Cable Leaning Towers", "Prone Heel Touches"];
+const majorUpper = ["KB Standing Close Grip Chest Press", "DB Chest Press", "DB Incline Chest press", "DB Incline Reverse Chest Press", "DB Decline Chest press", "DB Decline Reverse Chest Press", "Cable Chest Press", "Cable Incline Chest press", "Cable Decline Chest Press", "Cable Kneeling Chest Press", "Cable Incline Chest Press", "Cable Kneeling Decline Chest press", "BB Chest Press", "BB Incline Press", "BB Decline Press", "BB Close Grip Incline Chest Press", "BB Close Grip Decline  Chest Press", "Band Standing press", "Band Incline Standing Press", "Band Decline Standing Press", "Stabilizing Plate Press", "Stabilizing Plate incline Press", "Stabilizing Decline Plate Press", "DB Close Grip Press", "DB Close Grip incline Press", "DB Close Grip Decline Press", "DB Bent Over Row", "BB standing Bent over Row", "Cable standing Row", "Seated Cable Row", "T-Bar Row", "T-Bar single Arm Row", "KB Single Arm Row", "Cable Standing UnderRow to the hip", "Cable Seated Underrow to the Hip", "KB Bent Over Under Row", "Band Lat Row", "Band Seated Row", "Band Single Arm bent Row", "DB Shoulder Press", "BB Shoulder Press", "DB Isolated Shoulder Press", "DB Upright Row", "DB Bent Rear Delt Shoulder Row", "Cable Upright Row", "Cable Standing Shoulder Press", "KB Upright Row", "KB Single Arm Upright Right Row", "KB Single Arm Press", "Band Shoulder Press", "Band Upright Row", "Landmine Pull and Press", "Landmine Single Arm Row"];
+const minorUpper = ["DB Chest Fly", "DB Incline Chest Fly", "DB Decline Chest Fly", "Cable Undergrip Chest Fly", "Cable Undergrip incline chest Fly", "Cable Undergrip Decline Chest Fly", "Cable Chest Fly", "Cable Incline Chest Fly", "Cable Decline Chest Fly", "Cable Kneeling Chest Fly", "Cable Kneeling Incline Chest Fly", "Cable Kneeling Decline Chest Fly", "Band Fly", "Band Incline Fly", "Band Decline Fly", "Band Tricep extension", "DB Tricep extension", "DB Tricep Kickback", "BB Skull Crusher", "DB Skull Crusher", "KB Tricep Extension", "Tricep Cable Push-down", "Tricep Cable Overhead Extension", "Body Weight Dips", "Weighted Dips", "Dip Machine", "Tricep Extension Machine", "Rope Cable Tricep Extension", "Push Ups", "Close Grip Push Ups", "Diamond Push Ups", "Incline Push Ups", "Inverted Push ups", "Seated Tricep Dips", "Lat Pull Down", "Straight Arm standing Lat pulldown", "Cable Isolated Lat pulldown", "Kneeling Isolated Cable Lat Pull", "Band Straight Arm Lat Push Down", "DB Shoulder Fly", "DB Lateral Raise", "DB Front Raises", "DB Inverted Front Raises", "DB Bent Over Rear Delt Flys", "Cable Rear Delt Flys", "Cable Rear Delt Pulls to face", "Cable Lateral Raise", "Cable Frontal Raise", "KB Frontal Raise", "KB Lateral Raise", "Band Lateral Raise", "Band Rear Delt Bent Raise", "Band Frontal Raise", "DB Bicep Curl", "DB Reverse Bicep Curl", "DB Hammer Curl", "DB Drag Curl", "BB Bicep Curl", "BB Stabilized Bicep Curl", "BB Reverse Bicep Curl", "BB Drag Curl", "Cable Robe Hammer Curl", "Cable Drag Curl", "Cable Isolated Bicep Curl", "Cable Overhead Bicep Curl", "Band Bicep Curl", "Band Hammer Curl", "Band Reverse Grip Curl"];
+const majorLower = ["BB Deadlift", "DB Deadlift", "KB Deadlift", "BB Straight Legged Deadlift", "DB Straight Legged Deadlift", "KB Straight Legged Deadlift", "Band Deadlift", "BB Squat", "BB Over Head Squat", "DB Squat", "DB Over Head Squat", "KB Squat", "KB Over Head Squat", "DB Squat to Press", "BB Squat to Press", "KB Squat to Press", "Medicine Ball Squat to Press", "BB Squat to High Pull", "KB Squat to High Pull", "Single DB Lunge to Press", "KB Lunge to Press", "Medicine Ball Lunge to Press", "Hack Squat (M)", "Goblet Squats", "Leg Press (M)", "Sissy Squats(M)", "Jump Squats", "Pistol Squats", "Single DB Deadlift", "Pulsing Squats", "Front Squat", "TRX Assisted Squats", "TRX Jump Squats", "TRX Side to Side Squat"];
+const minorLower = ["BB Reverse Lunges", "DB Reverse Lunges", "BB Lunges", "DB Lunges", "KB Over Head Lunge", "DB Over Head Lunge", "Hamstring Curl (M)", "Leg Extension (M)", "Abductors (M)", "Adductors (M)", "Band abductors", "Standing Band Abductors", "Banded Walking Side lunges", "Floor Hip Thrusts", "Smith Machine Hip Thrusts", "Cable Kickbacks", "Kickbacks (M)", "Cable Lateral Leg Raises", "Bodyweight Kickbacks", "Prone Cable Hamstring Curl", "Weighted Step Ups", "Step Ups", "Calf Extension", "Calf Raises", "Calf Raises Smith Machine (M)", "Curtsy Lunge", "Good Mornings", "Back Extensions", "Band Kick Backs", "Fire Hydrants", "Band Fire Hydrants", "Slider Lunges", "Slider Curtsy Lunges", "Slider Hamstring Bridges", "Single Legged Bridges", "Lateral Leg Raises", "Prone Leg Raises", "Bulgarian Lunge", "Weighted Bulgarian Lunge", "Walking Lunges", "Cable Donkey Kickbacks", "Body Weight Donkey Kickbacks", "Elevated Side lunges", "TRX Curtsy Lunge", "TRX Lunge", "TRX Assisted Kick backs", "KB Swings", "Single Arm KB Swings", "Single Arm Power Klings", "Single Legged Hip Thrusts", "Skiers"];
+
+function getRandomExercises(source, count) {
+  let shuffled = [...source].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+}
+
+function generatePlan() {
+  const days = parseInt(document.getElementById('daysPerWeek').value);
+  const goal = document.getElementById('goal').value;
+  const equipment = document.getElementById('equipment').value;
+  const output = document.getElementById('output');
+  let plan = [];
+
+  const daysMap = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  let legDays = 0, coreDays = 0;
+
+  for (let i = 0; i < days; i++) {
+    let day = daysMap[i];
+    let type = "";
+
+    if (legDays < 2) {
+      type = "Lower (Legs)";
+      legDays++;
+    } else if (coreDays < Math.floor(days / 2)) {
+      type = "Core & Cardio";
+      coreDays++;
+    } else {
+      type = "Upper (Push/Pull)";
+    }
+
+    let note = "";
+    let major = [], minor = [];
+
+    if (type === "Lower (Legs)") {
+      note = legDays === 1 ? "Focus: Squats" : "Focus: Deadlifts";
+      major = getRandomExercises(majorLower, 3);
+      minor = getRandomExercises(minorLower, 4);
+    } else if (type === "Core & Cardio") {
+      note = "Planks, Crunches, and HIIT";
+      major = getRandomExercises(majorCore, 3);
+      minor = getRandomExercises(minorCore, 4);
+    } else {
+      note = "Push-ups, Rows, Shoulder Presses";
+      major = getRandomExercises(majorUpper, 3);
+      minor = getRandomExercises(minorUpper, 4);
+    }
+
+    plan.push({ day, type, note, major, minor });
+  }
+
+  let html = "<h2>Your Weekly Plan</h2><ul>";
+  plan.forEach(p => {
+    html += `<li><strong>${p.day}:</strong> ${p.type} – ${p.note}<br>
+             <strong>Major Lifts:</strong><ul>` +
+             p.major.map(ex => `<li>${ex}</li>`).join('') +
+             `</ul><strong>Minor Lifts:</strong><ul>` +
+             p.minor.map(ex => `<li>${ex}</li>`).join('') +
+             `</ul></li>`;
+  });
+  html += "</ul>";
+  output.innerHTML = html;
+
+  localStorage.setItem("smartPlan", JSON.stringify(plan));
+}
+
+async function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const plan = JSON.parse(localStorage.getItem("smartPlan") || "[]");
+
+  doc.setFontSize(18);
+  doc.text("Your Smart Workout Plan", 20, 20);
+  doc.setFontSize(12);
+
+  let y = 40;
+  plan.forEach(p => {
+    doc.text(`${p.day}: ${p.type} – ${p.note}`, 20, y);
+    y += 10;
+    doc.text("Major Lifts:", 25, y); y += 8;
+    p.major.forEach(ex => { doc.text(`- ${ex}`, 30, y); y += 8; });
+    doc.text("Minor Lifts:", 25, y); y += 8;
+    p.minor.forEach(ex => { doc.text(`- ${ex}`, 30, y); y += 8; });
+    y += 6;
+  });
+
+  doc.save("Smart_Workout_Plan.pdf");
+}
+</script>
+<a href="plan.html" style="display:inline-block; margin:20px; padding:12px 24px; background:#333; color:white; text-decoration:none; border-radius:6px;">View Weekly Plan</a></body>
+</html>

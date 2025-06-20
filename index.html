@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>FitForge | Start Your Transformation</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<style>
+  body {
+    background: linear-gradient(to bottom right, #ffe4e1, #ddb2c9);
+    color: #2b2b2b;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  h1, h2, h3 {
+    color: #9b1b52;
+    text-align: center;
+  }
+  .tagline {
+    color: #d63384;
+    font-style: italic;
+    font-weight: 600;
+  }
+  button {
+    background-color: #9b1b52;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: transform 0.2s, background-color 0.2s;
+  }
+  button:hover {
+    transform: translateY(-2px);
+    background-color: #7f1643;
+  }
+  .calendar .day {
+    border: 3px solid #9b1b52;
+    background-color: #ffe4e1;
+    transition: background-color 0.3s, border 0.3s;
+  }
+  .calendar .day.completed {
+    background-color: #ffdfe8;
+  }
+  .calendar .day.current {
+    border-color: #7f1643;
+    background-color: #ffc7d0;
+  }
+</style>
+<style>
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+<main style="background: url('images/trainer-bg.jpg') no-repeat center center/cover; padding: 100px 20px; text-align: center; color: white;">
+<h1 style="font-size: 3em; font-weight: bold; text-shadow: 2px 2px #000;">Build Your Fierce Fit Plan</h1>
+<p style="font-size: 1.3em; margin: 20px auto; max-width: 600px; text-shadow: 1px 1px #000;">
+    Personalized workouts. Real results. For women who conquer.
+  </p>
+<div style="margin-top: 30px;">
+<a href="questionnaire.html" style="background: #ff4081; padding: 15px 30px; margin: 10px; border-radius: 5px; color: white; text-decoration: none; font-size: 1.2em;">🔥 Start Questionnaire</a>
+<a href="login.html" style="background: #00bcd4; padding: 15px 30px; margin: 10px; border-radius: 5px; color: white; text-decoration: none; font-size: 1.2em;">👤 Already Registered? Login</a>
+</div>
+</main>
+<header>
+<nav style="background:#111; padding:15px; display:flex; justify-content:space-around; color:white;">
+<a href="index.html" style="color:white; text-decoration:none;">Home</a>
+<a href="questionnaire.html" style="color:white; text-decoration:none;">Questionnaire</a>
+<a href="plan.html" style="color:white; text-decoration:none;">My Plan</a>
+<a href="login.html" style="color:white; text-decoration:none;">Login</a>
+<a href="register.html" style="color:white; text-decoration:none;">Register</a>
+</nav>
+</header>
+<div style="text-align:center; margin: 20px auto;">
+<img alt="Independent Woman Banner" src="https://tse2.mm.bing.net/th?id=OIP.N1CTh29B9Zw4K5wMFJs1KAAAAA&amp;pid=Api" style="max-width:100%; border-radius:12px;"/>
+</div>
+<h1>💪 Let's Build Your Program</h1>
+<div style="text-align:center; margin: 20px auto;">
+<img alt="Fierce Woman 1" src="assets/fierce2.jpg" style="max-width:90%; border-radius:12px; margin-bottom:15px;"/>
+<img alt="Fierce Woman 2" src="assets/fierce3.jpg" style="max-width:90%; border-radius:12px; margin-bottom:15px;"/>
+<img alt="Fierce Woman 3" src="assets/fierce4.jpg" style="max-width:90%; border-radius:12px;"/>
+</div>
+<h3 class="tagline">Reach your goals in 10–12 weeks!</h3>
+<form action="register.html" id="questionnaire" method="get" onsubmit="showPreview(event)" style="max-width:600px; margin:0 auto; font-size: 1.1em;">
+<fieldset>
+<legend>1. What’s your fitness level?</legend>
+<label><input name="fitness" required="" type="radio" value="beginner"/> Beginner</label><br/>
+<label><input name="fitness" type="radio" value="intermediate"/> Intermediate</label><br/>
+<label><input name="fitness" type="radio" value="advanced"/> Advanced</label>
+</fieldset>
+<fieldset>
+<legend>2. What’s your main goal?</legend>
+<label><input name="goal" required="" type="radio" value="lose"/> Lose Weight</label><br/>
+<label><input name="goal" type="radio" value="tone"/> Tone &amp; Sculpt</label><br/>
+<label><input name="goal" type="radio" value="build"/> Build Strength</label>
+</fieldset>
+<fieldset>
+<legend>3. How many days/week can you commit?</legend>
+<label><input name="days" required="" type="radio" value="3"/> 3 Days</label><br/>
+<label><input name="days" type="radio" value="4"/> 4 Days</label><br/>
+<label><input name="days" type="radio" value="5"/> 5 Days</label>
+</fieldset>
+<br/>
+<button style="padding:12px 20px; font-weight:bold; background:#9b1b52; color:white; border:none; border-radius:6px;" type="submit">Setup Your Program</button>
+<button onclick="location.href='login.html'" style="margin-left:10px; padding:12px 20px; background:#ccc; color:#333; border:none; border-radius:6px;" type="button">Already a Customer</button>
+</form>
+<script>
+function showPreview(event) {
+  event.preventDefault();
+  document.getElementById('questionnaire').style.display = 'none';
+  const preview = document.getElementById('planPreview');
+  preview.style.display = 'block';
+  preview.classList.add('fade-in');
+}
+</script>
+<a href="register.html" style="display:inline-block; margin:20px; padding:12px 24px; background:#333; color:white; text-decoration:none; border-radius:6px;">Start Your Plan</a></body>
+</html>
